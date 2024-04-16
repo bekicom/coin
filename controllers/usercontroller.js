@@ -1,13 +1,11 @@
-// user controller
-
 const User = require("../models/user.model");
-const userValidation = require("../utils/validator");
+const { TanlanganKompyuter, validateTanlanganKompyuter } = require("../utils/validator");
 
 const userController = {
   // get all users
   async getAllUsers(req, res) {
     try {
-      const users = await User.find();
+      const users = await TanlanganKompyuter.find();
       res.json(users);
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -16,7 +14,7 @@ const userController = {
   // get user by id
   async getUserById(req, res) {
     try {
-      const user = await User.findById(req.params.id);
+      const user = await TanlanganKompyuter.findById(req.params.id);
       res.json(user);
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -24,27 +22,29 @@ const userController = {
   },
   // create new user
   async createUser(req, res) {
-    const { error } = userValidation(req.body);
+    const { error } = validateTanlanganKompyuter(req.body);
+
+    console.log(req.body);
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
     }
     try {
-      const user = new User(req.body);
-      await user.save();
-      res.json({ message: "User created successfully" });
+      const kompyuter = new TanlanganKompyuter(req.body);
+      await kompyuter.save();
+      res.json({ message: "Kompyuter created successfully" });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
   },
   // update user
   async updateUser(req, res) {
-    const { error } = userValidation(req.body);
+    const { error } = validateTanlanganKompyuter(req.body);
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
     }
     try {
-      await User.findByIdAndUpdate(req.params.id, req.body);
-      res.json({ message: "User updated successfully" });
+      await TanlanganKompyuter.findByIdAndUpdate(req.params.id, req.body);
+      res.json({ message: "Kompyuter updated successfully" });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
@@ -52,8 +52,8 @@ const userController = {
   // delete user
   async deleteUser(req, res) {
     try {
-      await User.findByIdAndDelete(req.params.id);
-      res.json({ message: "User deleted successfully" });
+      await TanlanganKompyuter.findByIdAndDelete(req.params.id);
+      res.json({ message: "Kompyuter deleted successfully" });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
@@ -61,3 +61,4 @@ const userController = {
 };
 
 module.exports = userController;
+
