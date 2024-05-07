@@ -16,6 +16,8 @@ const userSchema = new Schema({
     {
       id: String,
       yaratilgansana: Date,
+      name: String, // Added name field
+      phone: String, // Added phone field
       sotilganmahsulotlar: [
         {
           id: String,
