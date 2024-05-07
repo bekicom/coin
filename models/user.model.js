@@ -1,21 +1,34 @@
 const { Schema, model } = require("mongoose");
 
 const userSchema = new Schema({
- 
-   tanlanganKompyuterSchema :{
-    kategoriya: {
+  products: [
+    {
+      id: String,
+      name: String,
       type: String,
-      required: true,
+      amount: Number,
+      price: Number,
+      volume: Number,
+      date: Date,
     },
-    marka: String,
-    protsessor: String,
-    avlod: String,
-    xotiraTur: String,
-    xotiraOlchami: String,
-    ekranOlchami: String,
-    narx: String,
-  }
- 
+  ],
+  markets: [
+    {
+      id: String,
+      yaratilgansana: Date,
+      sotilganmahsulotlar: [
+        {
+          id: String,
+          name: String,
+          type: String,
+          amount: Number,
+          price: Number,
+          volume: Number,
+          date: Date,
+        },
+      ],
+    },
+  ],
 });
 
 module.exports = model("User", userSchema);
