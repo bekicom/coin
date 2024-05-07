@@ -1,41 +1,47 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
-// Tanlangan kompyuter skhemasi uchun validatsiya schema
-const tanlanganKompyuterSchema = new Schema({
-  category:String,
-  brand: String,
-  processor: String,
-  avlod: String,
-  storageType: String,
-  storageSize: String,
-  screenSize: String,
-  price: String,
+// Mahsulot skhemasi uchun validatsiya schema
+const productSchema = Joi.object({
+  id: Joi.string().required(),
+  name: Joi.string().required(),
+  type: Joi.string().required(),
+  amount: Joi.number().required(),
+  price: Joi.number().required(),
+  volume: Joi.number().required(),
+  date: Joi.date().required(),
 });
 
-
-// Validatsiya schema
-const validationSchema = Joi.object({
-  category: Joi.string().required(),
-  brand: Joi.string(),
-  processor: Joi.string(),
-  avlod: Joi.string(),
-  storageType: Joi.string(),
-  storageSize: Joi.string(),
-  screenSize: Joi.string(),
-  price: Joi.number(), // Narx son bo'lishi kerak bo'lsa
+// Bozor skhemasi uchun validatsiya schema
+const marketSchema = Joi.object({
+  id: Joi.string().required(),
+  yaratilgansana: Joi.date().required(),
+  name: Joi.string().required(),
+  phone: Joi.string().required(),
+  sotilganmahsulotlar: Joi.array().items(productSchema),
 });
-
 
 // Modelni yaratish
-const TanlanganKompyuter = model("TanlanganKompyuter", tanlanganKompyuterSchema);
+const User = model(
+  "User",
+  new Schema({
+    products: [productSchema],
+    markets: [marketSchema],
+  })
+);
 
-// Validatsiya funktsiyasi
-const validateTanlanganKompyuter = (data) => {
-  return validationSchema.validate(data);
-};
+// Mahsulotlar bo'yicha validation funksiyasi
+function validateProduct(product) {
+  return productSchema.validate(product);
+}
+
+// Bozorlar bo'yicha validation funksiyasi
+function validateMarket(market) {
+  return marketSchema.validate(market);
+}
 
 module.exports = {
-  TanlanganKompyuter,
-  validateTanlanganKompyuter,
+  User,
+  validateProduct,
+  validateMarket,
 };
